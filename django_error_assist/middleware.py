@@ -7,8 +7,7 @@ from .exceptions import (ImProperTypeError, ImProperValueError)
 class DjangoErrorAssistMiddleware(object):
     def __init__(self, get_response):
         """
-        Middleware to get the help for the error that occurs in Django from
-        source developers prefer.
+        Middleware to get the help for the error that occurs in Django from the source developers prefer.
         """
         # https://docs.djangoproject.com/en/1.11/topics/http/middleware/#writing-your-own-middleware
         self.get_response = get_response
@@ -41,7 +40,7 @@ class DjangoErrorAssistMiddleware(object):
                 raise ImProperTypeError("DJANGO_ERROR_ASSIST_FROM variable "
                                         "should be of type 'str' ")
             # check if the variable is valid and expected string
-            if settings.DJANGO_ERROR_ASSIST_FROM.lower() not in self.sources.iterkeys():
+            if settings.DJANGO_ERROR_ASSIST_FROM.lower() not in self.sources:
                 raise ImProperValueError("DJANGO_ERROR_ASSIST_FROM variable can take either "
                                          "'google' or 'stackoverflow' ")
         else:
@@ -55,7 +54,7 @@ class DjangoErrorAssistMiddleware(object):
         self.query_link += "{{ exception_type|escape }}"
         # append the query_link to HTML_STRING
         self.formatted_html_string = self.__HTML_STRING % (self.query_link,
-                                                      settings.DJANGO_ERROR_ASSIST_FROM)
+                                                           settings.DJANGO_ERROR_ASSIST_FROM)
         # get the replacement string
         replacement = self.__REPLACE_STRING + self.formatted_html_string
         # check if this class exists in the template
